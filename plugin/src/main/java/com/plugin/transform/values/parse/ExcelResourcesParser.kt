@@ -1,17 +1,17 @@
-package com.toolkit.transformvaluesplugin.core.parse
+package com.plugin.transform.values.parse
 
-import com.toolkit.transformvaluesplugin.core.utils.AndroidString
-import com.toolkit.transformvaluesplugin.core.utils.Logger
-import com.toolkit.transformvaluesplugin.core.TransformValuesPluginConfig
+import com.plugin.transform.values.TransformValuesPluginConfig
+import com.plugin.transform.values.utils.AndroidString
+import com.plugin.transform.values.utils.Logger
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileInputStream
 
-class ExcelResourcesParser {
+internal class ExcelResourcesParser {
 
-    fun parseExcelFile(config: TransformValuesPluginConfig) {
+    internal fun parseExcelFile(config: TransformValuesPluginConfig) {
 
         val fis = FileInputStream(config.getExcelFile())
 
@@ -47,7 +47,7 @@ class ExcelResourcesParser {
                         }
                 }
             }
-            XmlResourcesWriter.writerToXml(config.buildValuesStringsFile(col), stringList)
+            XmlResourcesWriter.writerToXml(config.buildValuesFile(col), stringList)
             releaseMap(stringList)
         }
     }

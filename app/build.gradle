@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'transformValuesPlugin'
 }
 
 android {
@@ -34,13 +35,21 @@ android {
         viewBinding true
     }
 
-    packagingOptions{
+    packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
 }
 
-dependencies {
+transformValuesConfig {
+//    excelPath "C:\\Users\\qinf\\Desktop\\AiScore全量翻译.xlsx"
+//    outputPath "E:\\WorkSpace\\TransformValuesPlugin\\app\\src\\main\\res"
+//    stringNameColumn 0
+//    defaultValueColumn 2
+//    mappingValues 14 "pl"
+}
 
+dependencies {
+    implementation" androidx.startup:startup-runtime:1.0.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'

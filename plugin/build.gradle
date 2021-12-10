@@ -1,0 +1,43 @@
+plugins {
+    id 'groovy'
+    id 'kotlin'
+    id 'maven-publish'
+}
+
+
+repositories {
+    google()
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation "com.android.tools.build:gradle:4.0.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.10"
+    implementation 'org.apache.poi:poi:5.1.0'
+    implementation 'org.apache.poi:poi-ooxml:5.1.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+    implementation 'org.apache.commons:commons-text:1.9'
+
+}
+
+
+def group = 'com.plugin.transform'
+def name = 'values'
+def ver = '1.0.2'
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = name
+            version = ver
+
+            from components.java
+        }
+    }
+}

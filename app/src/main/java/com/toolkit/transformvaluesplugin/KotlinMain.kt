@@ -12,7 +12,7 @@ class KotlinMain {
         @JvmStatic
         fun main(args: Array<String>) {
             val excelPath = "C:\\Users\\qinf\\Desktop\\AiScore全量翻译.xlsx"
-            val outputPath = "E:\\WorkSpace\\TransformValuesPlugin\\app\\src\\main\\res"
+            val outputPath = "E:\\Score\\onescore-android\\libs\\base\\src\\main\\res"
             val config = TransformValuesPluginConfig(excelPath, outputPath,defaultValueColumn = 2)
             ExcelResourcesParser().apply {
                 parseExcelFile(config)
