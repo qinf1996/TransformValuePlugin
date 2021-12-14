@@ -7,22 +7,19 @@ internal object Logger {
 
     private var sLogger: Logger? = null
 
-    fun make(project: Project): Unit {
+    fun make(project: Project) {
         sLogger = project.logger
     }
 
-    fun i(message:String){
-        System.out.println(message)
+    fun i(message: String) {
         sLogger?.info(message)
     }
 
-    fun w(message: String,throwable: Throwable? = null){
-        System.out.println(message)
-        sLogger?.warn(message,throwable)
+    fun w(message: String, throwable: Throwable? = null) {
+        sLogger?.warn(message, throwable)
     }
 
-    fun e(message: String,throwable: Throwable? = null){
-        System.out.println(message)
-        sLogger?.error(message,throwable)
+    fun e(message: String, throwable: Throwable? = null) {
+        sLogger?.error(message, throwable)
     }
 }

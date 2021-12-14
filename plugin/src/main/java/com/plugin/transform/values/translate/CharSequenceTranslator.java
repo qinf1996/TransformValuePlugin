@@ -1,6 +1,5 @@
 package com.plugin.transform.values.translate;
 
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -13,7 +12,7 @@ import java.util.Locale;
  *
  * @since 1.0
  */
-abstract class CharSequenceTranslator {
+public abstract class CharSequenceTranslator {
 
     /**
      * Array containing the hexadecimal alphabet.
@@ -93,20 +92,6 @@ abstract class CharSequenceTranslator {
                 pos += Character.charCount(Character.codePointAt(input, pos));
             }
         }
-    }
-
-    /**
-     * Helper method to create a merger of this translator with another set of
-     * translators. Useful in customizing the standard functionality.
-     *
-     * @param translators CharSequenceTranslator array of translators to merge with this one
-     * @return CharSequenceTranslator merging this translator with the others
-     */
-    public final CharSequenceTranslator with(final CharSequenceTranslator... translators) {
-        final CharSequenceTranslator[] newArray = new CharSequenceTranslator[translators.length + 1];
-        newArray[0] = this;
-        System.arraycopy(translators, 0, newArray, 1, translators.length);
-        return new AggregateTranslator(newArray);
     }
 
     /**

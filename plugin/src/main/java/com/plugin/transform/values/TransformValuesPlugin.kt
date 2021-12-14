@@ -9,12 +9,21 @@ class TransformValuesPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         Logger.make(project)
-        val config =
-            project.extensions.create("transformValuesConfig", TransformValuesPluginConfig::class.java)
-        Logger.i(" config " + config)
-//        config.checkParams()
-//        ExcelResourcesParser().apply {
-//            parseExcelFile(config)
-//        }
+        Logger.i(" apply ... ")
+        val config = project.extensions.create(
+            "transformValuesConfig",
+            TransformValuesPluginConfig::class.java
+        )
+
+        project.tasks.create("transformValues") {
+            it.group = "transform"
+            it.doLast {
+                Logger.i("transformValues#doLast.. , config:$config")
+                config.checkParams()
+                ExcelResourcesParser().apply {
+                    parseExcelFile(config)
+                }
+            }
+        }
     }
 }

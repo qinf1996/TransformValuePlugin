@@ -8,28 +8,42 @@ import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
 
 internal class ExcelResourcesParser {
 
     internal fun parseExcelFile(config: TransformValuesPluginConfig) {
 
-        val fis = FileInputStream(config.getExcelFile())
+        var fis: InputStream? = null
+        try {
+            fis = FileInputStream(config.excelFile)
+            val workbook: Workbook =
+                takeIf { config.isXlsxFile() }?.let { XSSFWorkbook(fis) } ?: HSSFWorkbook(fis)
+            val sheet = config.sheetName.takeIf { it.isNotEmpty() }?.let {
+                workbook.getSheet(it)
+            } ?: workbook.getSheetAt(0)
+            parseCellWriteToFile(config, sheet)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                fis?.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
 
-        val workbook: Workbook =
-            takeIf { config.isXlsxFile() }?.let { XSSFWorkbook(fis) } ?: HSSFWorkbook(fis)
-
-        val sheet = config.sheetName.takeIf { it.isNotEmpty() }?.let {
-            workbook.getSheet(it)
-        } ?: workbook.getSheetAt(0)
-
-        parseCellWriteToFile(config, sheet)
+        }
     }
 
     private fun parseCellWriteToFile(config: TransformValuesPluginConfig, sheet: Sheet) {
         val columnCount = sheet.getRow(sheet.firstRowNum).lastCellNum
         val rowCount = sheet.lastRowNum
-        Logger.i("parseSheetCell#columnCount: $columnCount rowCount: $rowCount")
-        for (col in 0 until columnCount) {
+        Logger.i("parseSheetCell ...  columnCount: $columnCount , rowCount: $rowCount")
+        for (col in 0..columnCount) {
             if (col == config.stringNameColumn) {
                 continue
             }
@@ -40,7 +54,9 @@ internal class ExcelResourcesParser {
                         ?.takeIf { it.isNotEmpty() }
                         ?.also { name ->
                             val value = getCell(col)?.toString()?.takeIf { it.isNotEmpty() }
-                                ?: getCell(config.defaultValueColumn)?.toString().orEmpty()
+                                ?: config.defaultValueColumn.takeIf { it >= 0 }?.let {
+                                    getCell(config.defaultValueColumn)?.toString().orEmpty()
+                                } ?: ""
                             value.takeIf { it.isNotEmpty() }?.also {
                                 stringList.add(AndroidString(name, value))
                             }
@@ -79,6 +95,7 @@ internal class ExcelResourcesParser {
 
     companion object {
         private const val POOL_SIZE = 4
-        private val LINKED_MAP_POOL: Array<MutableList<AndroidString>?> = arrayOfNulls(POOL_SIZE)
+        private val LINKED_MAP_POOL: Array<MutableList<AndroidString>?> =
+            arrayOfNulls(POOL_SIZE)
     }
 }
